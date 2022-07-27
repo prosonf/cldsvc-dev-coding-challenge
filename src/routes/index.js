@@ -1,25 +1,18 @@
 const express = require('express');
+const createError = require('http-errors');
 const orderMatchingService = require('../orderBookService');
+const orderValidator = require('../orderValidator');
 
 const router = express.Router();
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars,consistent-return
 router.post('/order/submit', (req, res, next) => {
+  const errors = orderValidator.validateNewOrder(req.body);
+
+  if (errors.length) {
+    return next(createError(400, { errors }));
+  }
   res.send(orderMatchingService.orderMatching(req.body));
-
-  /*
-    TODO
-    - If the new order is a buy, then match with the other sell orders
-    - If the new order is a sell, then match with the other buy orders
-
-    Response format:
-    {
-      'id': '3f8ecd64-f37e-11eb-9a03-0242ac130003'
-      'amount': ...,
-      'price': ...,
-      'status' 'FILLED' or 'PARTIALLY_FILLED' or 'REJECTED' or 'PENDING'
-    }
-  */
 });
 
 // eslint-disable-next-line no-unused-vars
