@@ -1,22 +1,11 @@
 const express = require('express');
+const orderMatchingService = require('../orderBookService');
 
 const router = express.Router();
 
-/*
-  let orderbook = { }
-
-  Hint: the data structure used for the orderbook can dramatically
-        impact efficiency.
-*/
-
-const TYPE_FILLED = 'FILLED'; // order matched entirely
-const TYPE_PARTIALLY_FILLED = 'PARTIALLY_FILLED'; // order matched partially and is pending in orderbook
-const TYPE_REJECTED = 'REJECTED'; // order failed to match
-const TYPE_PENDING = 'PENDING'; // order did not match and is pending in orderbook
-
 // eslint-disable-next-line no-unused-vars
 router.post('/order/submit', (req, res, next) => {
-  res.send({ message: 'Not implemented' });
+  res.send(orderMatchingService.orderMatching(req.body));
 
   /*
     TODO
@@ -35,24 +24,7 @@ router.post('/order/submit', (req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 router.get('/orderbook', (req, res, next) => {
-  res.send({ message: 'Not implemented' });
-
-  /*
-    TODO
-    - Return entire orderbook
-
-    Response format:
-    {
-      'asks': [
-        { 'price': ..., 'amount': ... },
-        ...
-      ],
-      'bids': [
-        { 'price': ..., 'amount': ... },
-        ...
-      ]
-    }
-  */
+  res.send(orderMatchingService.getAllOrderLists());
 });
 
 module.exports = router;
